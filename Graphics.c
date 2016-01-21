@@ -9,12 +9,14 @@ static AEGfxTexture *pTex1;					// Pointer to Texture (Image)
 static AEGfxTexture *pTex2;					// Pointer to Texture (Image)
 
 static Sprite* sprite; //only one for debug purposes
-SpriteList* spriteList;
-
-
-Animation* animtest;
-Animation* animtest2;
+static Animation* animtest;
+static Animation* animtest2;
 //EXAMPLE CODE ENDS HERE
+
+static SpriteList* spriteList; //list of sprites for game layer
+static SpriteList* hudLayer; //list of sprites for hud layer
+static MeshList* meshList;
+static TextureList* textureList;
 
 /*!
 \brief Initializes graphics stuff.
@@ -26,24 +28,32 @@ void GInitialize()
   spriteList->first = NULL;
   spriteList->last = NULL;
 
+  //create hud layer
+  hudLayer = malloc(sizeof(SpriteList));
+  hudLayer->first = NULL;
+  hudLayer->last = NULL;
+
+
   //EXAMPLE IMAGE/MESH LOADING & CREATION
   // Informing the library that we're about to start adding triangles
-  AEGfxMeshStart();
+  /*AEGfxMeshStart();
 
   // This shape has 2 triangles
   AEGfxTriAdd(
-    -64.0f, -64.0f, 0x00FF00FF, 0.0f, 1.0f,
-    64.0f, -64.0f, 0x00FFFF00, 0.0625f, 1.0f,
-    -64.0f, 64.0f, 0x00F00FFF, 0.0f, 0.0f);
+    -400.0f, -600.0f, 0x00FF00FF, 0.0f, 1.0f,
+    400.0f, -600.0f, 0x00FFFF00, 0.0625f, 1.0f,
+    -400.0f, 600.0f, 0x00F00FFF, 0.0f, 0.0f);
 
   AEGfxTriAdd(
-    64.0f, -64.0f, 0x00FFFFFF, 0.0625f, 1.0f,
-    64.0f, 64.0f, 0x00FFFFFF, 0.0625, 0.0f,
-    -64.0f, 64.0f, 0x00FFFFFF, 0.0f, 0.0f);
+    400.0f, -600.0f, 0x00FFFFFF, 0.0625f, 1.0f,
+    400.0f, 600.0f, 0x00FFFFFF, 0.0625, 0.0f,
+    -400.0f, 600.0f, 0x00FFFFFF, 0.0f, 0.0f);
 
   pMesh2 = AEGfxMeshEnd();
-  AE_ASSERT_MESG(pMesh2, "Failed to create mesh 2!!");
-
+  AE_ASSERT_MESG(pMesh2, "Failed to create mesh 2!!");*/
+  pMesh2 = GCreateMesh(128.f, 128.f, 16);
+  pMesh2 = GCreateMesh(256.f, 256.f, 16);
+  pMesh2 = GCreateMesh(128.f, 128.f, 16);
 
   // Texture 1: From file
   pTex1 = AEGfxTextureLoad("PlanetTexture.png");
@@ -61,15 +71,16 @@ void GInitialize()
 
     //EXAMPLE CODE, REMOVE OUT WHEN USING
   {
-    //sprite = CreateSprite(-5, -5, pTex1, pMesh2);
-    //sprite = CreateSprite(-25, -25, pTex2, pMesh2);
-    animtest = CreateAnimation(16, pTex2, pMesh2);
-    animtest2 = CreateAnimation(1, pTex1, pMesh2);
-    sprite = CreateSprite(0, 30, animtest, 4);
-    sprite = CreateSprite(0, 20, animtest, 4);
-    sprite = CreateSprite(0, -30, animtest, 4);
-    sprite = CreateSprite(0, 50, animtest, 4);
-    sprite = CreateSprite(10, 60, animtest, 4);
+    //sprite = GCreateSprite(-5, -5, pTex1, pMesh2);
+    //sprite = GCreateSprite(-25, -25, pTex2, pMesh2);
+    animtest = GCreateAnimation(16, pTex2, pMesh2);
+    animtest2 = GCreateAnimation(1, pTex1, pMesh2);
+    //sprite = GCreateSprite(0, 30, animtest, 4);
+    //sprite = GCreateSprite(0, 20, animtest, 4);
+    //sprite = GCreateSprite(0, -30, animtest, 4);
+    sprite = GCreateSprite(0, 40, animtest2, 4);
+    sprite = GCreateSprite(0, 0, animtest, 4);
+    //sprite = GCreateHudSprite(0, 0, animtest2, 1);
   }
     //EXAMPLE CODE ENDS HERE
 }
@@ -81,8 +92,8 @@ void GRender()
 {
     //EXAMPLE CODE, REMOVE OUT WHEN USING
   {
-    sprite->y -= 1;
-    SortSprite(sprite, -1);
+    //if (sprite)
+      //RemoveSprite(&sprite);
   }
     //EXAMPLE CODE ENDS HERE
 
@@ -107,6 +118,72 @@ void GRender()
   }
 
   
+  //render HUD in list starting from the first item
+  if (hudLayer->first)
+  {
+    Sprite* spriteIndex = hudLayer->first;
+    while (spriteIndex)
+    {
+      SimAnimation(spriteIndex);
+      AEGfxSetPosition(spriteIndex->x, spriteIndex->y);
+      AEGfxTextureSet(spriteIndex->animation->texture, spriteIndex->animation->frameOffset * spriteIndex->frame, 0.0f);
+      AEGfxSetTransparency(1.0f);
+      AEGfxMeshDraw(spriteIndex->animation->mesh, AE_GFX_MDM_TRIANGLES);
+      spriteIndex = spriteIndex->lowerSprite;
+
+
+    }
+  }
+
+  
+  
+}
+
+
+/*!
+\brief Creates a mesh with given width & height
+
+\param _width width of mesh
+\param _height height of mesh
+\param numframes number of frames in the animation associated with this mesh
+*/
+struct AEGfxVertexList* GCreateMesh(float _width, float _height, float _numFrames)
+{
+  float frameScale = 1/_numFrames;
+  AEGfxVertexList* temp;
+  _width *= 0.5;
+  _height *= 0.5;
+
+  AEGfxMeshStart();
+  AEGfxTriAdd(
+    -_width, -_height, 0x00FF00FF, 0.0f, 1.0f,
+    _width, -_height, 0x00FFFF00, frameScale, 1.0f,
+    -_width, _height, 0x00F00FFF, 0.0f, 0.0f);
+
+  AEGfxTriAdd(
+    _width, -_height, 0x00FFFFFF, frameScale, 1.0f,
+    _width, _height, 0x00FFFFFF, frameScale, 0.0f,
+    -_width, _height, 0x00FFFFFF, 0.0f, 0.0f);
+
+  temp = AEGfxMeshEnd();
+  
+  if (meshList)
+  {
+    MeshList* index = meshList;
+    MeshList* newMesh = malloc(sizeof(meshList));
+    newMesh->item = temp;
+    newMesh->next = meshList;
+    meshList = newMesh;
+  }
+  else {
+    meshList = malloc(sizeof(meshList));
+    meshList->item = temp;
+    meshList->next = NULL;
+    
+  }
+ //  temp;
+  return temp;
+  AE_ASSERT_MESG(pMesh2, "Failed to create mesh!!");
   
 }
 
@@ -116,7 +193,21 @@ void GRender()
 void GFree()
 {
   // Freeing the objects and textures
-  AEGfxMeshFree(pMesh2);
+  MeshList* index;
+  
+  while (meshList)
+  {
+    index = meshList;
+    if (meshList->next)
+    {
+      meshList = meshList->next;
+    }
+    if (index->item)
+      AEGfxMeshFree(index->item);
+    else
+      break;
+  }
+  //AEGfxMeshFree(pMesh2);
 
   AEGfxTextureUnload(pTex1);
 }
@@ -131,7 +222,7 @@ Sprite layer is initialized based on _spriteY param.
 \param _mesh is a pointer to the vertex list (mesh) for the sprite
 \param _frameDelay the number of frames to wait in between changing frames for the animation
 */
-Sprite* CreateSprite(float _spriteX, float _spriteY, Animation* _animation, float _frameDelay)//struct AEGfxTexture* _texture, struct AEGfxVertexList* _mesh)
+Sprite* GCreateSprite(float _spriteX, float _spriteY, Animation* _animation, float _frameDelay)//struct AEGfxTexture* _texture, struct AEGfxVertexList* _mesh)
 {
  
   Sprite* newSprite = malloc(sizeof(struct Sprite));
@@ -146,6 +237,7 @@ Sprite* CreateSprite(float _spriteX, float _spriteY, Animation* _animation, floa
   newSprite->timer = 0;
   newSprite->paused = 0;
   newSprite->frameDelay = _frameDelay;
+  newSprite->isHud = 0;
 
 
   if (!spriteList->first) //if first, set first in list
@@ -187,17 +279,77 @@ Sprite* CreateSprite(float _spriteX, float _spriteY, Animation* _animation, floa
 }
 
 /*!
+\brief creates sprite with given parameters
+Sprite is appended to last on the list (more recently created elements are rendered first.
+
+\param _spriteX is the x position of the created sprite
+\param _spriteY is the y position of the created sprite
+\param _texture is a pointer to what texture for the sprite
+\param _mesh is a pointer to the vertex list (mesh) for the sprite
+\param _frameDelay the number of frames to wait in between changing frames for the animation
+*/
+Sprite* GCreateHudSprite(float _spriteX, float _spriteY, Animation* _animation, float _frameDelay)//struct AEGfxTexture* _texture, struct AEGfxVertexList* _mesh)
+{
+
+  Sprite* newSprite = malloc(sizeof(struct Sprite));
+  newSprite->x = _spriteX;
+  newSprite->y = _spriteY;
+  //newSprite->texture = _texture;
+  //newSprite->mesh = _mesh;
+  newSprite->higherSprite = NULL;
+  newSprite->lowerSprite = NULL;
+  newSprite->animation = _animation;
+  newSprite->frame = 0;
+  newSprite->timer = 0;
+  newSprite->paused = 0;
+  newSprite->frameDelay = _frameDelay;
+  newSprite->isHud = 1;
+
+
+  if (!hudLayer->first) //if first, set first in list
+  {
+    hudLayer->first = newSprite;
+  }
+  else
+  {
+    if (hudLayer->last)
+    {
+      hudLayer->last->lowerSprite = newSprite;
+    }
+    hudLayer->last = newSprite;
+    
+  }
+  return newSprite;
+}
+
+/*!
 \brief Removes sprite object 
+Pass the address of a pointer to the sprite, not the pointer itself: &sprite instead of sprite assuming that sprite is a pointer to a sprite struct.
 
 \param _input pointer to pointer to sprite
 */
 void RemoveSprite(Sprite** _input)
 {
+  SpriteList* spriteLayer; //pointer to the layer that the sprite is in
+  
   if (_input)
   {
-    //printf("inp: %p", _input);
+    switch ((*_input)->isHud) //check what layer the sprite is in, set the layer pointer accordingly
+    {
+    
+    case 1:
+      spriteLayer = hudLayer;
+      break;
+    default:
+    case 0:
+      spriteLayer = spriteList;
+        break;
+    }
+    
+    
     if ((*_input)->higherSprite)
     {
+      
       if ((*_input)->lowerSprite)
       {
         (*_input)->lowerSprite->higherSprite = (*_input)->higherSprite;
@@ -206,25 +358,27 @@ void RemoveSprite(Sprite** _input)
       else
       {
         (*_input)->higherSprite->lowerSprite = NULL;
-        spriteList->last = (*_input)->higherSprite;
+        spriteLayer->last = (*_input)->higherSprite;
       }
 
     }
     else
     {
+      
       if ((*_input)->lowerSprite)
       {
         (*_input)->lowerSprite->higherSprite = NULL;
-        spriteList->first = (*_input)->lowerSprite;
+        spriteLayer->first = (*_input)->lowerSprite;
       }
       else
       {
-        spriteList->first = NULL;
-        spriteList->last = NULL;
+        spriteLayer->first = NULL;
+        spriteLayer->last = NULL;
       }
     }
     free(*_input); //note: may also free animation? no time to test, will check later
     *_input = NULL;
+    
   }
 }
 
@@ -237,7 +391,7 @@ Does not create texture & mesh objects as part of the process.
 \param _texture pointer to the texture to be used
 \param _mesh pointer to the mesh to be used
 */
-Animation* CreateAnimation(float _numFrames, struct AEGfxTexture* _texture, struct AEGfxVertexList* _mesh)
+Animation* GCreateAnimation(float _numFrames, struct AEGfxTexture* _texture, struct AEGfxVertexList* _mesh)
 {
   Animation* newAnim = malloc(sizeof(Animation));
   
@@ -269,7 +423,7 @@ void SimAnimation(Sprite* _input)
   if (_input->frame >= _input->animation->length)
   {
     _input->frame = 0;
-    printf("a");
+    //printf("a");
 
   }
 }

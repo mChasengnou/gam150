@@ -3,6 +3,8 @@
 typedef struct Animation Animation;
 typedef struct Sprite Sprite; 
 typedef struct SpriteList SpriteList;
+typedef struct MeshList MeshList;
+typedef struct TextureList TextureList;
 
 /*!
 \struct Sprite
@@ -25,6 +27,8 @@ Also acts as a linked list between sprites for layering resolution. Sprites are 
   int paused; /*! bool, whether or not to play*/
 
   int frameDelay; /*! how many engine frames to wait before changing animation frame*/
+
+  int isHud; /*! whether or not the sprite is part of the hud, set to 1 if it is, 0 otherwise*/
 
 
  };
@@ -57,18 +61,34 @@ Also acts as a linked list between sprites for layering resolution. Sprites are 
    float frameOffset; /*! amount to offset, aka 1/(num frames)*/
  };
 
+ struct MeshList
+ {
+   struct AEGfxVertexList* item;
+   MeshList* next;
+ };
+
+ struct TextureList
+ {
+   struct AEGfxTexture* item;
+   TextureList* next;
+ };
+
 void GRender(); //call every frame to render sprites
 
 void GInitialize(); //call before render once to initialize
 
 void GFree(); //call after game/level is over to free resources
 
-Sprite* CreateSprite(float _spriteX, float _spriteY, Animation* _animation, float _frameDelay); //creates a sprite struct
+Sprite* GCreateSprite(float _spriteX, float _spriteY, Animation* _animation, float _frameDelay); //creates a sprite struct
 
 void SortSprite(Sprite* sprite, float direction); //call every time the sprite changes y position
 
-Animation* CreateAnimation(float _numFrames, struct AEGfxTexture* _texture, struct AEGfxVertexList* _mesh); //creates an animation
+Animation* GCreateAnimation(float _numFrames, struct AEGfxTexture* _texture, struct AEGfxVertexList* _mesh); //creates an animation
 
 void SimAnimation(Sprite* _input); //call every frame on every sprite to animate
 
 void RemoveSprite(Sprite** _input); //call to remove a sprite on screen
+
+Sprite* GCreateHudSprite(float _spriteX, float _spriteY, Animation* _animation, float _frameDelay); //call to create a sprite on the hud layer
+
+struct AEGfxVertexList* GCreateMesh(float _width, float _height, float _numFrames); //call to create a mesh
