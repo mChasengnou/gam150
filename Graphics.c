@@ -52,8 +52,8 @@ void GInitialize()
   pMesh2 = AEGfxMeshEnd();
   AE_ASSERT_MESG(pMesh2, "Failed to create mesh 2!!");*/
   pMesh2 = GCreateMesh(128.f, 128.f, 16);
-  pMesh2 = GCreateMesh(256.f, 256.f, 16);
-  pMesh2 = GCreateMesh(128.f, 128.f, 16);
+  //pMesh2 = GCreateMesh(256.f, 256.f, 16);
+  //pMesh2 = GCreateMesh(128.f, 128.f, 16);
 
   // Texture 1: From file
   pTex1 = AEGfxTextureLoad("PlanetTexture.png");
@@ -193,24 +193,33 @@ struct AEGfxVertexList* GCreateMesh(float _width, float _height, float _numFrame
 void GFree()
 {
   // Freeing the objects and textures
-  MeshList* index;
+  MeshList* temp = meshList;
+  MeshList* tempPrevious;
   
-  while (meshList)
+  if (temp)
   {
-    index = meshList;
-    if (meshList->next)
+    while (temp->next)
     {
-      meshList = meshList->next;
+      tempPrevious = temp;
+      //free(tempPrevious);
+      //printf("%i||", temp->item->vtxNum);
+      AEGfxMeshFree(temp->item);
+      //printf("%p))", temp->item);
+      temp = temp->next;
+      
+      
     }
-    if (index->item)
-      AEGfxMeshFree(index->item);
-    else
-      break;
+    //printf("%i||", temp->item->vtxNum);
+    AEGfxMeshFree(temp->item);
+    //printf("%p))", temp->item);
+    //free(temp);
   }
-  //AEGfxMeshFree(pMesh2);
-
+  //free(meshList);
+  free(spriteList);
+  free(hudLayer);
   AEGfxTextureUnload(pTex1);
 }
+
 
 /*!
 \brief creates sprite with given parameters
