@@ -87,8 +87,10 @@ Animation* GCreateAnimation(float _numFrames, struct AEGfxTexture* _texture, str
 
 void SimAnimation(Sprite* _input); //call every frame on every sprite to animate
 
-void RemoveSprite(Sprite** _input); //call to remove a sprite on screen
+void GRemoveSprite(Sprite** _input); //call to remove a sprite on screen
 
 Sprite* GCreateHudSprite(float _spriteX, float _spriteY, Animation* _animation, float _frameDelay); //call to create a sprite on the hud layer
 
 struct AEGfxVertexList* GCreateMesh(float _width, float _height, float _numFrames); //call to create a mesh
+
+struct AEGfxTexture* GCreateTexture(char* _textureName); //call to create a texture

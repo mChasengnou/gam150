@@ -56,10 +56,10 @@ void GInitialize()
   //pMesh2 = GCreateMesh(128.f, 128.f, 16);
 
   // Texture 1: From file
-  pTex1 = AEGfxTextureLoad("PlanetTexture.png");
-  AE_ASSERT_MESG(pTex1, "Failed to create texture1!!");
+  pTex1 = GCreateTexture("PlanetTexture.png");
+  //AE_ASSERT_MESG(pTex1, "Failed to create texture1!!");
 
-  pTex2 = AEGfxTextureLoad("spiderwolfbrighter.png");
+  pTex2 = GCreateTexture("spiderwolfbrighter.png");//AEGfxTextureLoad("spiderwolfbrighter.png");
 
   AEGfxSetBackgroundColor(1.0f, 1.0f, 1.0f);
   AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -93,7 +93,7 @@ void GRender()
     //EXAMPLE CODE, REMOVE OUT WHEN USING
   {
     //if (sprite)
-      //RemoveSprite(&sprite);
+      //GRemoveSprite(&sprite);
   }
     //EXAMPLE CODE ENDS HERE
 
@@ -188,6 +188,37 @@ struct AEGfxVertexList* GCreateMesh(float _width, float _height, float _numFrame
 }
 
 /*!
+\brief Loads a texture
+
+\param _textureName name of texture string
+*/
+struct AEGfxTexture* GCreateTexture(char* _textureName)
+{
+  AEGfxTexture* temp;
+  
+  temp = AEGfxTextureLoad(_textureName);
+
+  if (textureList)
+  {
+    TextureList* index = textureList;
+    TextureList* newTex = malloc(sizeof(TextureList));
+    newTex->item = temp;
+    newTex->next = textureList;
+    textureList = newTex;
+  }
+  else {
+    textureList = malloc(sizeof(textureList));
+    textureList->item = temp;
+    textureList->next = NULL;
+
+  }
+
+  return temp;
+  AE_ASSERT_MESG(pMesh2, "Failed to create texture!!");
+
+}
+
+/*!
 \brief Call this function to unload everything once the gameplay is over.
 */
 void GFree()
@@ -196,6 +227,8 @@ void GFree()
   MeshList* temp = meshList;
   MeshList* tempPrevious;
   
+  TextureList* temp2 = textureList;
+  TextureList* tempPrevious2;
   if (temp)
   {
     while (temp->next)
@@ -214,10 +247,32 @@ void GFree()
     //printf("%p))", temp->item);
     //free(temp);
   }
+
+  
+
+  if (temp2)
+  {
+    while (temp2->next)
+    {
+      tempPrevious2 = temp;
+      //free(tempPrevious);
+      //printf("%i||", temp->item->vtxNum);
+      AEGfxTextureUnload(temp2->item);
+      //printf("%p))", temp->item);
+      temp2 = temp2->next;
+
+
+    }
+    //printf("%i||", temp->item->vtxNum);
+    AEGfxTextureUnload(temp2->item);
+    //printf("%p))", temp->item);
+    //free(temp);
+  }
+
   //free(meshList);
   free(spriteList);
   free(hudLayer);
-  AEGfxTextureUnload(pTex1);
+  //AEGfxTextureUnload(pTex1);
 }
 
 
@@ -337,7 +392,7 @@ Pass the address of a pointer to the sprite, not the pointer itself: &sprite ins
 
 \param _input pointer to pointer to sprite
 */
-void RemoveSprite(Sprite** _input)
+void GRemoveSprite(Sprite** _input)
 {
   SpriteList* spriteLayer; //pointer to the layer that the sprite is in
   
