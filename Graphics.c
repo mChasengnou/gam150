@@ -3,15 +3,7 @@
 
 
 
-//EXAMPLE VARIABLES, NOT STRICTLY NEEDED
-static AEGfxVertexList*	pMesh2;				// Pointer to Mesh (Model)
-static AEGfxTexture *pTex1;					// Pointer to Texture (Image)
-static AEGfxTexture *pTex2;					// Pointer to Texture (Image)
 
-static Sprite* sprite; //only one for debug purposes
-static Animation* animtest;
-static Animation* animtest2;
-//EXAMPLE CODE ENDS HERE
 
 static SpriteList* spriteList; //list of sprites for game layer
 static SpriteList* hudLayer; //list of sprites for hud layer
@@ -34,55 +26,8 @@ void GInitialize()
   hudLayer->last = NULL;
 
 
-  //EXAMPLE IMAGE/MESH LOADING & CREATION
-  // Informing the library that we're about to start adding triangles
-  /*AEGfxMeshStart();
-
-  // This shape has 2 triangles
-  AEGfxTriAdd(
-    -400.0f, -600.0f, 0x00FF00FF, 0.0f, 1.0f,
-    400.0f, -600.0f, 0x00FFFF00, 0.0625f, 1.0f,
-    -400.0f, 600.0f, 0x00F00FFF, 0.0f, 0.0f);
-
-  AEGfxTriAdd(
-    400.0f, -600.0f, 0x00FFFFFF, 0.0625f, 1.0f,
-    400.0f, 600.0f, 0x00FFFFFF, 0.0625, 0.0f,
-    -400.0f, 600.0f, 0x00FFFFFF, 0.0f, 0.0f);
-
-  pMesh2 = AEGfxMeshEnd();
-  AE_ASSERT_MESG(pMesh2, "Failed to create mesh 2!!");*/
-  pMesh2 = GCreateMesh(128.f, 128.f, 16);
-  //pMesh2 = GCreateMesh(256.f, 256.f, 16);
-  //pMesh2 = GCreateMesh(128.f, 128.f, 16);
-
-  // Texture 1: From file
-  pTex1 = GCreateTexture("PlanetTexture.png");
-  //AE_ASSERT_MESG(pTex1, "Failed to create texture1!!");
-
-  pTex2 = GCreateTexture("spiderwolfbrighter.png");//AEGfxTextureLoad("spiderwolfbrighter.png");
-
-  AEGfxSetBackgroundColor(1.0f, 1.0f, 1.0f);
-  AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-  //EXAMPLE ENDS HERE
-  
 
 
-
-
-    //EXAMPLE CODE, REMOVE OUT WHEN USING
-  {
-    //sprite = GCreateSprite(-5, -5, pTex1, pMesh2);
-    //sprite = GCreateSprite(-25, -25, pTex2, pMesh2);
-    animtest = GCreateAnimation(16, pTex2, pMesh2);
-    animtest2 = GCreateAnimation(1, pTex1, pMesh2);
-    //sprite = GCreateSprite(0, 30, animtest, 4);
-    //sprite = GCreateSprite(0, 20, animtest, 4);
-    //sprite = GCreateSprite(0, -30, animtest, 4);
-    sprite = GCreateSprite(0, 40, animtest2, 4);
-    sprite = GCreateSprite(0, 0, animtest, 4);
-    //sprite = GCreateHudSprite(0, 0, animtest2, 1);
-  }
-    //EXAMPLE CODE ENDS HERE
 }
 
 /*!
@@ -183,7 +128,7 @@ struct AEGfxVertexList* GCreateMesh(float _width, float _height, float _numFrame
   }
  //  temp;
   return temp;
-  AE_ASSERT_MESG(pMesh2, "Failed to create mesh!!");
+  AE_ASSERT_MESG(temp, "Failed to create mesh!!");
   
 }
 
@@ -210,11 +155,11 @@ struct AEGfxTexture* GCreateTexture(char* _textureName)
     textureList = malloc(sizeof(textureList));
     textureList->item = temp;
     textureList->next = NULL;
-
+    
   }
 
   return temp;
-  AE_ASSERT_MESG(pMesh2, "Failed to create texture!!");
+  AE_ASSERT_MESG(temp, "Failed to create texture!!");
 
 }
 

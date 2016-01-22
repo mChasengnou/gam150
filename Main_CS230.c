@@ -14,6 +14,7 @@
 #include "AEEngine.h"
 
 #include "Graphics.h"
+#include "LevelManager.h"
 // ---------------------------------------------------------------------------
 
 // Libraries
@@ -61,7 +62,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	if(0 == AESysInit (&sysInitInfo))
 		printf("System Init Failed!\n");
 
-  GInitialize();
+  LevelLoad();
+  //GInitialize();
 
 	// Changing the window title
 	AESysSetWindowTitle("My New Title!");
@@ -104,7 +106,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 			gGameRunning = 0;
 	}
 
-  GFree();
+  LevelUnload();
 
 
 
