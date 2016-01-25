@@ -163,6 +163,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Audio.c" />
     <ClCompile Include="Graphics.c" />
     <ClCompile Include="LevelManager.c" />
     <ClCompile Include="Main_CS230.c">
@@ -171,6 +172,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Audio.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="LevelManager.h" />
   </ItemGroup>
