@@ -73,10 +73,18 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\AE LIB;C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\lib;C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\lib;C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\AE LIB;C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\inc;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\AE LIB;C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\lib;C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\lib;C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\AE LIB;C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\inc;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\Alpha_Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Alpha_Engine;C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\inc;C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -86,13 +94,15 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAs>CompileAsC</CompileAs>
+      <AdditionalUsingDirectories>C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\lib;C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\inc;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\inc;C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\lib;$(SolutionDir)$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>fmodL64_vc.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -119,7 +129,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\Alpha_Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Alpha_Engine;C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\inc;C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -131,12 +141,13 @@
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\inc;C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD\lib;$(SolutionDir)$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>fmod64_vc.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -164,7 +175,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Audio.c" />
-    <ClCompile Include="Graphics.c" />
+    <ClCompile Include="Graphics.c">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Armed_Watcher\DP_2015_2016\SPRING\GAM150\project_git\gam150\FMOD;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="LevelManager.c" />
     <ClCompile Include="Main_CS230.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>

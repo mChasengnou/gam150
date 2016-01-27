@@ -8,8 +8,13 @@ ChangeLog
 -
 ******************************************************************/
 #include "Audio.h"
-#include "FMOD\fmod.h"
+#include <fmod.h>
+
 #include <stdlib.h>  /* malloc, free */
+
+FMOD_SYSTEM *fMod_sysObject = NULL;
+FMOD_RESULT result;
+
 
 /* 
   Initialize the audio system. Instructions for initialization taken
@@ -19,16 +24,17 @@ http://www.fmod.org/docs/content/generated/FMOD_System_Init.html
 void InitializeAudio(void)
 {
   /* Create a system object to use with FMOD.  */
-  FMOD_SYSTEM *fMod_sysObject = malloc(sizeof(fMod_sysObject));
 
   /* Max number of audio channels to use. Limit is 4093. */
   int channels = 10;
-
+  
+  /* Not going to use extra drivers with FMOD, so set to NULL. */
   void *extraDriverData = NULL;
 
-  /* Create an FMOD system. */
-  FMOD_System_Create(&fMod_sysObject);
+
+  /* Create an FMOD system. */ //NOT WORKING!!!
+  result = FMOD_System_Create(&fMod_sysObject);
 
   /* Initialize the FMOD system. */
-  //FMOD_System_Init(fMod_sysObject, channels, )
+  //FMOD_System_Init(fMod_sysObject, channels );
 }

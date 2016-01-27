@@ -17,8 +17,9 @@ void LevelLoad()
   pMesh2 = GCreateMesh(128.f, 128.f, 16);
 
   // Texture 1: From file
-  pTex1 = GCreateTexture("PlanetTexture.png");
-  pTex2 = GCreateTexture("spiderwolfbrighter.png");
+  /* Use files from "Art_sprites" directory */
+  pTex1 = GCreateTexture("Art_sprites\\PlanetTexture.png");
+  pTex2 = GCreateTexture("Art_sprites\\spiderwolfbrighter.png");
 
   AEGfxSetBackgroundColor(1.0f, 1.0f, 1.0f);
   AEGfxSetBlendMode(AE_GFX_BM_BLEND);
