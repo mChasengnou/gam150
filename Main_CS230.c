@@ -15,6 +15,9 @@
 
 #include "Graphics.h"
 #include "LevelManager.h"
+
+#include "Audio.h"
+#include "SoundTest.h" // for audio testing
 // ---------------------------------------------------------------------------
 
 // Libraries
@@ -61,9 +64,13 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	if(0 == AESysInit (&sysInitInfo))
 		printf("System Init Failed!\n");
-
-  LevelLoad();
-  //GInitialize();
+    
+    //test initialize the sound stuff
+    InitializeAudio();
+    
+    LevelLoad();
+    //GInitialize();
+    TestAudioLoad();
 
 	// Changing the window title
 	AESysSetWindowTitle("My New Title!");
@@ -81,10 +88,12 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		// Handling Input
 		AEInputUpdate();
 
+        // Testing audio
+        TestAudioPlay();
 		///////////////////
 		// Game loop update
 		
-
+        
 		// Game loop update
 		///////////////////
 

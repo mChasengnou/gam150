@@ -5,10 +5,12 @@
     <ClCompile Include="LevelManager.c" />
     <ClCompile Include="Main_CS230.c" />
     <ClCompile Include="Audio.c" />
+    <ClCompile Include="SoundTest.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="Audio.h" />
+    <ClInclude Include="SoundTest.h" />
   </ItemGroup>
 </Project>
